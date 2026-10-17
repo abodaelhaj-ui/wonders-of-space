@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=550, user-scalable=no">
+    <!-- كود إثبات الملكية لجوجل Search Console -->
+    <meta name="google-site-verification" content="googlebc3d5097cb697028" />
+    
+    <title>عجائب خلق الله في الكون - رحلة فلكية</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- مكتبات Three.js و GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+
+    <!-- خلفية الجزيئات الذهبية المتحركة -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- زر القائمة الجانبية (3 شرط) -->
+    <button class="menu-toggle-btn" id="menu-toggle" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- القائمة الجانبية السلايدر -->
+    <aside class="sidebar-drawer" id="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fa-solid fa-compass"></i> الملاحة الفلكية</h3>
+            <button class="close-btn" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="sidebar-links">
+            <span class="menu-label">الأقسام الرئيسية</span>
+            <button class="drawer-btn active" onclick="showPlanetsSection(); toggleSidebar();"><i class="fa-solid fa-globe"></i> الكواكب</button>
+            <button class="drawer-btn" onclick="showGalaxiesSection(); toggleSidebar();"><i class="fa-solid fa-dharmachakra"></i> المجرات</button>
+            <button class="drawer-btn dev-drawer-btn" onclick="showDeveloperInfo(); toggleSidebar();"><i class="fa-solid fa-user-gear"></i> عن المطور</button>
+            
+            <span class="menu-label">الكواكب المباشرة</span>
+            <button class="drawer-btn" onclick="showPlanetsSection(); selectPlanet('sun'); toggleSidebar();"><i class="fa-solid fa-sun"></i> الشمس</button>
+            <button class="drawer-btn" onclick="showPlanetsSection(); selectPlanet('mercury'); toggleSidebar();"><i class="fa-solid fa-circle"></i> عطارد</button>
+            <button class="drawer-btn" onclick="showPlanetsSection(); selectPlanet('venus'); toggleSidebar();"><i class="fa-solid fa-globe"></i> الزهرة</button>
+            <button class="drawer-btn" onclick="showPlanetsSection(); selectPlanet('earth'); toggleSidebar();"><i class="fa-solid fa-earth-americas"></i> الأرض</button>
+            <button class="drawer-btn" onclick="showPlanetsSection(); selectPlanet('mars'); toggleSidebar();"><i class="fa-solid fa-meteor"></i> المريخ</button>
+            <button class="drawer-btn" onclick="showPlanetsSection(); selectPlanet('jupiter'); toggleSidebar();"><i class="fa-solid fa-ring"></i> المشترى</button>
+            <button class="drawer-btn" onclick="showPlanetsSection(); selectPlanet('saturn'); toggleSidebar();"><i class="fa-solid fa-circle-notch"></i> زحل</button>
+            <button class="drawer-btn" onclick="showPlanetsSection(); selectPlanet('uranus'); toggleSidebar();"><i class="fa-solid fa-atom"></i> أورانوس</button>
+            <button class="drawer-btn" onclick="showPlanetsSection(); selectPlanet('neptune'); toggleSidebar();"><i class="fa-solid fa-compact-disc"></i> نبتون</button>
+        </div>
+    </aside>
+
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- الهيدر والعنوان -->
+    <header class="golden-header">
+        <h1 class="golden-title">عجائب خلق الله في الكون</h1>
+        <p class="golden-subtitle">رحلة تفاعلية استكشافية حقيقية عبر كواكب ومجرات الكون بلمسة ملكية ذهبية</p>
+    </header>
+
+    <!-- محاور العرض الرئيسية -->
+    <main class="solar-main">
+        <!-- شريط الأقسام الرئيسية -->
+        <nav class="planet-nav">
+            <button class="planet-btn active" id="main-planets-tab" onclick="showPlanetsSection()"><i class="fa-solid fa-globe"></i> الكواكب</button>
+            <button class="planet-btn galaxy-btn" id="main-galaxies-tab" onclick="showGalaxiesSection()"><i class="fa-solid fa-dharmachakra"></i> المجرات</button>
+            <button class="planet-btn developer-nav-btn" id="main-dev-tab" onclick="showDeveloperInfo()"><i class="fa-solid fa-user-gear"></i> عن المطور</button>
+        </nav>
+
+        <!-- 1. قسم الكواكب -->
+        <section class="main-view-section" id="planets-section-view">
+            <div class="sub-nav-container">
+                <button class="sub-btn active" onclick="selectPlanet('sun')"><i class="fa-solid fa-sun"></i> الشمس</button>
+                <button class="sub-btn" onclick="selectPlanet('mercury')"><i class="fa-solid fa-circle"></i> عطارد</button>
+                <button class="sub-btn" onclick="selectPlanet('venus')"><i class="fa-solid fa-globe"></i> الزهرة</button>
+                <button class="sub-btn" onclick="selectPlanet('earth')"><i class="fa-solid fa-earth-americas"></i> الأرض</button>
+                <button class="sub-btn" onclick="selectPlanet('mars')"><i class="fa-solid fa-meteor"></i> المريخ</button>
+                <button class="sub-btn" onclick="selectPlanet('jupiter')"><i class="fa-solid fa-ring"></i> المشترى</button>
+                <button class="sub-btn" onclick="selectPlanet('saturn')"><i class="fa-solid fa-circle-notch"></i> زحل</button>
+                <button class="sub-btn" onclick="selectPlanet('uranus')"><i class="fa-solid fa-atom"></i> أورانوس</button>
+                <button class="sub-btn" onclick="selectPlanet('neptune')"><i class="fa-solid fa-compact-disc"></i> نبتون</button>
+            </div>
+
+            <div class="display-container">
+                <div class="planet-3d-wrapper" id="planet-3d-wrapper">
+                    <div id="planet-canvas-container"></div>
+                    <div class="instruction-badge"><i class="fa-solid fa-hand-pointer"></i> يمكنك تدوير الكوكب بالماوس أو اللمس</div>
+                </div>
+
+                <article class="planet-info-card" id="planet-info-card">
+                    <h2 id="planet-name" class="gold-text-glow">الشمس</h2>
+                    <div id="planet-type" class="planet-badge">نجم مركزي</div>
+                    
+                    <p id="planet-story" class="planet-description">
+                        الشمس هي قلب مجموعتنا الشمسية ونجمها الوحيد، تدور حولها كافة الكواكب والأجرام. تمتلك 99.8% من كتلة النظام الشمسي بأكمله وتولد طاقتها من الاندماج النووي في لبها.
+                    </p>
+
+                    <div class="stats-grid" id="planet-stats-grid">
+                        <div class="stat-box"><i class="fa-solid fa-rotate-right"></i><div><span>زمن اليوم (الدوران)</span><strong id="stat-day">27 يوماً أرضياً</strong></div></div>
+                        <div class="stat-box"><i class="fa-solid fa-arrows-spin"></i><div><span>زمن السنة (المدار)</span><strong id="stat-year">230 مليون سنة</strong></div></div>
+                        <div class="stat-box"><i class="fa-solid fa-temperature-high"></i><div><span>درجة الحرارة</span><strong id="stat-temp">5,500°C (السطح)</strong></div></div>
+                        <div class="stat-box"><i class="fa-solid fa-moon"></i><div><span>عدد الأقمار</span><strong id="stat-moons">0 قمر</strong></div></div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- 2. قسم المجرات -->
+        <section class="main-view-section" id="galaxies-section-view" style="display: none;">
+            <div class="galaxy-tabs">
+                <button class="galaxy-tab active" onclick="selectGalaxy('milkyway')">مجرة درب التبانة</button>
+                <button class="galaxy-tab" onclick="selectGalaxy('andromeda')">مجرة أندروميدا</button>
+                <button class="galaxy-tab" onclick="selectGalaxy('sombrero')">مجرة الصومعة (M104)</button>
+                <button class="galaxy-tab" onclick="selectGalaxy('whirlpool')">مجرة الدوارة (M51)</button>
+            </div>
+
+            <div class="galaxy-display-grid">
+                <div class="galaxy-3d-wrapper">
+                    <div id="galaxy-canvas-container"></div>
+                </div>
+
+                <div class="galaxy-info-card">
+                    <h3 id="galaxy-name" class="gold-text-glow">مجرة درب التبانة (Milky Way)</h3>
+                    <div id="galaxy-type-badge" class="planet-badge">مجرة حلزونية شريطية</div>
+                    <p id="galaxy-story" class="planet-description">
+                        مجرتنا الأم التي تحتضن كوكب الأرض والنظام الشمسي. تحتوي على أكثر من 100 إلى 400 مليار نجم، ويبلغ قطرها حوالي 100,000 سنة ضوئية وفي مركزها ثقب أسود هائل الحجم.
+                    </p>
+
+                    <div class="stats-grid">
+                        <div class="stat-box"><i class="fa-solid fa-arrows-left-right"></i><div><span>القطر التقديري</span><strong id="galaxy-diameter">100,000 سنة ضوئية</strong></div></div>
+                        <div class="stat-box"><i class="fa-solid fa-star"></i><div><span>عدد النجوم</span><strong id="galaxy-stars">100-400 مليار نجم</strong></div></div>
+                        <div class="stat-box"><i class="fa-solid fa-route"></i><div><span>البعد عن الأرض</span><strong id="galaxy-distance">نحن بداخلها (0)</strong></div></div>
+                        <div class="stat-box"><i class="fa-solid fa-circle-dot"></i><div><span>المركز</span><strong id="galaxy-core">ثقب أسود (Sagittarius A*)</strong></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. قسم عن المطور -->
+        <section class="main-view-section" id="developer-section-view" style="display: none;">
+            <div class="developer-card-container">
+                <div class="developer-profile-header">
+                    <div class="dev-avatar-wrapper">
+                        <img src="designer-pic.jpg" alt="أبو الحاج محمد" class="dev-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Abu+AlHaj&background=b8860b&color=ffffff&size=150'">
+                        <div class="avatar-glow"></div>
+                    </div>
+                </div>
+
+                <h2 class="gold-text-glow" style="text-align: center;">أبو الحاج محمد</h2>
+                <div class="planet-badge" style="display: block; width: fit-content; margin: 0 auto 1.5rem auto;">مطور ومصمم واجهات الويب</div>
+                
+                <p class="planet-description" style="text-align: center; max-width: 700px; margin: 0 auto 2rem auto;">
+                    تم تصميم وبناء هذه الموسوعة الملكية بأسلوب تفاعلي حديث يجمع بين قوة التكنولوجيا وجمال التصميم الفلكي، لتقديم رحلة بصرية فريدة بلمسة ذهبية منسقة.
+                </p>
+
+                <div class="stats-grid" style="max-width: 800px; margin: 0 auto;">
+                    <div class="stat-box dev-stat-box"><i class="fa-solid fa-user"></i><div><span>الاسم بالكامل</span><strong>أبو الحاج محمد</strong></div></div>
+                    <div class="stat-box dev-stat-box"><i class="fa-solid fa-graduation-cap"></i><div><span>الكلية والجامعة</span><strong>حاسبات والمعلومات - جامعة أسيوط</strong></div></div>
+                    <div class="stat-box dev-stat-box"><i class="fa-solid fa-flag"></i><div><span>الدولة</span><strong>جمهورية مصر العربية</strong></div></div>
+                    <div class="stat-box dev-stat-box"><i class="fa-solid fa-location-dot"></i><div><span>المحافظة</span><strong>محافظة سوهاج</strong></div></div>
+                    <div class="stat-box dev-stat-box"><i class="fa-solid fa-map-pin"></i><div><span>المركز والقرية</span><strong>دار السلام - قرية نقنق</strong></div></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="golden-footer">
+        <p>تصميم وتطوير أبو الحاج محمد - جميع الحقوق محفوظة ©</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

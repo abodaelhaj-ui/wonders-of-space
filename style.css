@@ -1,0 +1,447 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+
+:root {
+    --gold-primary: #ffd700;
+    --gold-light: #fff3a1;
+    --gold-dark: #b8860b;
+    --bg-black: #050508;
+    --card-bg: rgba(15, 15, 20, 0.85);
+    --border-gold: rgba(255, 215, 0, 0.35);
+    --transition-fast: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --font-apple: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", Arial, 'Cairo', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-apple);
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--bg-black);
+    color: #ffffff;
+    min-height: 100vh;
+    direction: rtl;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.planet-info-card, .planet-btn, .stat-box, .galaxy-info-card, .developer-card-container {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+}
+
+#particles-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* زر القائمة الجانبية (3 شرط) */
+.menu-toggle-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1100;
+    background: rgba(15, 15, 20, 0.85);
+    color: var(--gold-primary);
+    border: 1.5px solid var(--border-gold);
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: var(--transition-fast);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+.menu-toggle-btn:hover {
+    background: var(--gold-primary);
+    color: #000;
+}
+
+/* القائمة الجانبية السلايدر */
+.sidebar-drawer {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 300px;
+    height: 100vh;
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(20px);
+    border-left: 1.5px solid var(--border-gold);
+    z-index: 1200;
+    padding: 1.5rem;
+    transition: right 0.35s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+}
+
+.sidebar-drawer.open { right: 0; }
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-gold);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-header h3 { color: var(--gold-primary); font-size: 1.1rem; }
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #aaa;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.close-btn:hover { color: #fff; }
+
+.sidebar-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+}
+
+.menu-label {
+    font-size: 0.8rem;
+    color: var(--gold-light);
+    margin-top: 10px;
+    margin-bottom: 4px;
+    opacity: 0.7;
+}
+
+.drawer-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    color: #fff;
+    padding: 0.7rem 1rem;
+    border-radius: 12px;
+    text-align: right;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    transition: var(--transition-fast);
+}
+
+.drawer-btn i { color: var(--gold-primary); }
+
+.drawer-btn:hover, .drawer-btn.active {
+    background: var(--gold-primary);
+    color: #000;
+    font-weight: 700;
+}
+
+.drawer-btn:hover i, .drawer-btn.active i { color: #000; }
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.6);
+    z-index: 1150;
+    display: none;
+    backdrop-filter: blur(3px);
+}
+
+.overlay.active { display: block; }
+
+/* الهيدر والعنوان */
+.golden-header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 3rem 1rem 1.5rem 1rem;
+}
+
+.golden-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #ffffff 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.golden-subtitle {
+    color: #cccccc;
+    font-size: 1.05rem;
+    margin-top: 8px;
+}
+
+.solar-main {
+    position: relative;
+    z-index: 10;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* الأزرار الرئيسية */
+.planet-nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 1.5rem;
+}
+
+.planet-btn {
+    background: rgba(20, 20, 28, 0.85);
+    color: #ffffff;
+    border: 1.5px solid var(--border-gold);
+    padding: 0.75rem 2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition-fast);
+    backdrop-filter: blur(10px);
+}
+
+.planet-btn i { color: var(--gold-primary); }
+
+.planet-btn:hover, .planet-btn.active {
+    background: var(--gold-primary);
+    color: #000;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    transform: translateY(-3px);
+}
+
+.planet-btn:hover i, .planet-btn.active i { color: #000; }
+
+/* الشريط الفرعي للكواكب */
+.sub-nav-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    background: rgba(15, 15, 20, 0.6);
+    padding: 0.8rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 215, 0, 0.15);
+}
+
+.sub-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-gold);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sub-btn i { color: var(--gold-primary); }
+
+.sub-btn:hover, .sub-btn.active {
+    background: var(--gold-primary);
+    color: #000;
+    font-weight: 700;
+}
+
+.sub-btn:hover i, .sub-btn.active i { color: #000; }
+
+.display-container, .galaxy-display-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.planet-3d-wrapper, .galaxy-3d-wrapper {
+    position: relative;
+    background: radial-gradient(circle, rgba(30,30,45,0.4) 0%, rgba(5,5,8,0.8) 100%);
+    border: 1.5px solid var(--border-gold);
+    border-radius: 24px;
+    height: 480px;
+    overflow: hidden;
+    box-shadow: 0 0 35px rgba(0, 0, 0, 0.8);
+}
+
+#planet-canvas-container, #galaxy-canvas-container { width: 100%; height: 100%; }
+
+.instruction-badge {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--border-gold);
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--gold-light);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.planet-info-card, .galaxy-info-card, .developer-card-container {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    border: 1.5px solid var(--border-gold);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.gold-text-glow {
+    font-size: 2.2rem;
+    color: var(--gold-primary);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    margin-bottom: 5px;
+}
+
+.planet-badge {
+    display: inline-block;
+    background: rgba(255, 215, 0, 0.15);
+    color: var(--gold-light);
+    border: 1px solid var(--gold-primary);
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.planet-description {
+    line-height: 1.8;
+    color: #e0e0e0;
+    font-size: 1.05rem;
+    margin-bottom: 2rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+}
+
+.stat-box {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    padding: 1rem;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stat-box i { font-size: 1.5rem; color: var(--gold-primary); }
+.stat-box span { display: block; font-size: 0.8rem; color: #aaa; }
+.stat-box strong { font-size: 0.95rem; color: #fff; }
+
+.galaxy-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 1.8rem;
+    flex-wrap: wrap;
+}
+
+.galaxy-tab {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-gold);
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition-fast);
+}
+
+.galaxy-tab.active, .galaxy-tab:hover {
+    background: var(--gold-primary);
+    color: #000;
+    font-weight: 700;
+}
+
+.developer-profile-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.dev-avatar-wrapper {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+}
+
+.dev-avatar {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--gold-primary);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+    position: relative;
+    z-index: 2;
+}
+
+.avatar-glow {
+    position: absolute;
+    top: -5px; left: -5px; right: -5px; bottom: -5px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, transparent 70%);
+    animation: avatarPulse 2s ease-in-out infinite alternate;
+    z-index: 1;
+}
+
+.dev-stat-box {
+    background: rgba(255, 215, 0, 0.05) !important;
+    border: 1px solid rgba(255, 215, 0, 0.3) !important;
+}
+
+.golden-footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #888;
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(255, 215, 0, 0.1);
+    margin-top: 3rem;
+}
+
+@keyframes avatarPulse {
+    0% { transform: scale(0.98); opacity: 0.6; }
+    100% { transform: scale(1.05); opacity: 1; }
+}
+
+@keyframes floatImage {
+    0% { transform: translateY(0px) scale(1); }
+    100% { transform: translateY(-8px) scale(1.02); }
+}
+
+@media (max-width: 900px) {
+    .display-container, .galaxy-display-grid {
+        grid-template-columns: 1fr;
+    }
+    .planet-3d-wrapper, .galaxy-3d-wrapper {
+        height: 350px;
+    }
+}
